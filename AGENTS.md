@@ -93,21 +93,21 @@ Use Pinia for global state management. Each store should be self-contained and f
 - Keep stores focused on a single feature or domain
 - Use TypeScript for type safety
 
-**Example store:**
+**Example store (Composition API style - recommended):**
 ```typescript
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref, computed } from 'vue';
 
 export const useFeatureStore = defineStore('feature', () => {
-  // State
+  // State (using ref)
   const data = ref<DataType[]>([]);
   
-  // Getters
+  // Getters (using computed)
   const filteredData = computed(() => {
     return data.value.filter(/* ... */);
   });
   
-  // Actions
+  // Actions (using functions)
   function addData(item: DataType) {
     data.value.push(item);
   }
@@ -119,6 +119,35 @@ export const useFeatureStore = defineStore('feature', () => {
   };
 });
 
+// Enable HMR for development
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useFeatureStore, import.meta.hot));
+}
+```
+
+**Example store (Options API style):**
+```typescript
+import { defineStore, acceptHMRUpdate } from 'pinia';
+
+export const useFeatureStore = defineStore('feature', {
+  state: () => ({
+    data: [] as DataType[],
+  }),
+  
+  getters: {
+    filteredData: (state) => {
+      return state.data.filter(/* ... */);
+    },
+  },
+  
+  actions: {
+    addData(item: DataType) {
+      this.data.push(item);
+    },
+  },
+});
+
+// Enable HMR for development
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useFeatureStore, import.meta.hot));
 }
@@ -247,11 +276,16 @@ pnpm build
 
 ### Quasar Components
 
-Leverage Quasar's component library for UI elements:
+Leverage Quasar's component library for UI elements. Quasar components are auto-imported, so you don't need explicit imports:
 
 ```vue
 <script setup lang="ts">
-import { QBtn, QInput, QCard } from 'quasar';
+// Quasar components are auto-imported - no need to import them
+const text = ref('');
+
+function handleSubmit() {
+  // Handle submission
+}
 </script>
 
 <template>
@@ -260,6 +294,23 @@ import { QBtn, QInput, QCard } from 'quasar';
     <q-btn label="Submit" @click="handleSubmit" />
   </q-card>
 </template>
+```
+
+To access Quasar utilities like `$q`, use the `useQuasar` composable:
+
+```vue
+<script setup lang="ts">
+import { useQuasar } from 'quasar';
+
+const $q = useQuasar();
+
+function showNotification() {
+  $q.notify({
+    message: 'Hello World!',
+    color: 'primary'
+  });
+}
+</script>
 ```
 
 ### Composables
@@ -316,12 +367,11 @@ export const chatApi = {
 
 ### 2. Form Handling
 
-Use Quasar's form validation with reactive state:
+Use Quasar's form validation with reactive state (Quasar components are auto-imported):
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { QForm, QInput } from 'quasar';
 
 const formData = ref({
   name: '',
