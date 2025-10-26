@@ -1,6 +1,7 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from '#q-app/wrappers';
 
 export default defineConfig((/* ctx */) => {
@@ -59,7 +60,9 @@ export default defineConfig((/* ctx */) => {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf(viteConf) {
+        viteConf.plugins?.push(...tailwindcss());
+      },
       // viteVuePluginOptions: {},
 
       vitePlugins: [
