@@ -1,7 +1,7 @@
 <template>
-  <q-page class="flex flex-center">
-    <div class="text-3xl font-bold underline text-blue-500">Nitra AI Chat</div>
-  </q-page>
+  <ChatWidget />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ChatWidget from 'components/ChatWidget.vue';
+</script>
