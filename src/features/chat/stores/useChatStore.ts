@@ -1,7 +1,7 @@
-import { defineStore, acceptHMRUpdate } from 'pinia';
-import { ref, computed } from 'vue';
-import type { Message } from '../types/chat.types';
+import { acceptHMRUpdate, defineStore } from 'pinia';
 import { MESSAGE_MOCK_MAP } from 'src/mock/messages';
+import { computed, ref } from 'vue';
+import type { Message } from '../types/chat.types';
 
 export const useChatStore = defineStore('chat', () => {
   // State
@@ -24,7 +24,7 @@ export const useChatStore = defineStore('chat', () => {
 
   function extractSuggestionsFromContent(content: string): string[] {
     const suggestions: string[] = [];
-    
+
     // Extract "Suggested Question:" or "Suggestion Question:" from content
     const suggestionMatch = content.match(/Suggest(?:ed|ion) Question:(.+?)(?:\n|$)/i);
     if (suggestionMatch && suggestionMatch[1]) {
@@ -33,23 +33,23 @@ export const useChatStore = defineStore('chat', () => {
         suggestions.push(suggestion);
       }
     }
-    
+
     return suggestions;
   }
 
   function getMockResponse(userMessage: string): Message {
     // Check for exact match in MESSAGE_MOCK_MAP
     const mockData = MESSAGE_MOCK_MAP[userMessage as keyof typeof MESSAGE_MOCK_MAP];
-    
+
     if (mockData) {
       const { message } = mockData;
-      
+
       // Extract suggestions from content
       const extractedSuggestions = extractSuggestionsFromContent(message.content);
       if (extractedSuggestions.length > 0) {
         suggestions.value = extractedSuggestions;
       }
-      
+
       return {
         id: generateMessageId(),
         role: message.role as 'assistant',
@@ -57,12 +57,13 @@ export const useChatStore = defineStore('chat', () => {
         timestamp: new Date().toISOString(),
       };
     }
-    
+
     // Fallback response for unmatched messages
     return {
       id: generateMessageId(),
       role: 'assistant',
-      content: 'I understand your question. For now, I can help with specific queries about products. Try asking one of the suggested questions below!',
+      content:
+        'I understand your question. For now, I can help with specific queries about products. Try asking one of the suggested questions below!',
       timestamp: new Date().toISOString(),
     };
   }
@@ -70,7 +71,7 @@ export const useChatStore = defineStore('chat', () => {
   async function simulateDelay(): Promise<void> {
     // Simulate network delay (500-1500ms)
     const delay = 500 + Math.random() * 1000;
-    return new Promise(resolve => setTimeout(resolve, delay));
+    return new Promise((resolve) => setTimeout(resolve, delay));
   }
 
   async function sendMessage(content: string): Promise<void> {
@@ -127,11 +128,11 @@ export const useChatStore = defineStore('chat', () => {
     messages,
     isLoading,
     suggestions,
-    
+
     // Getters
     hasMessages,
     lastMessage,
-    
+
     // Actions
     addMessage,
     sendMessage,

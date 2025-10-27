@@ -1,2 +1,2 @@
 export { useChatStore } from './stores/useChatStore';
-export type { Message, ChatState, MockMessageResponse, MockMessage } from './types/chat.types';
+export type { ChatState, Message, MockMessage, MockMessageResponse } from './types/chat.types';
