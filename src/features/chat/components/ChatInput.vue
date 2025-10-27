@@ -1,5 +1,7 @@
 <template>
-  <div class="flex px-5 py-4 justify-between items-center bg-white rounded-b-lg border-t border-gray-100">
+  <div
+    class="flex px-5 py-4 justify-between items-center bg-white rounded-b-lg border-t border-gray-100"
+  >
     <div class="flex items-center gap-5 flex-1">
       <input
         ref="inputRef"
@@ -14,24 +16,10 @@
     <div class="flex items-center gap-5">
       <!-- Attachment Button -->
       <button
-        class="w-5 h-5 flex items-center justify-center text-gray-600 hover:opacity-80 transition-opacity"
+        class="w-5 h-5 flex items-center justify-center text-gray-600 hover:opacity-80 transition-opacity opacity-40"
         :disabled="disabled"
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M17.5 8.75V13.75C17.5 16.0972 15.5972 18 13.25 18C10.9028 18 9 16.0972 9 13.75V7.5C9 5.84315 10.3431 4.5 12 4.5C13.6569 4.5 15 5.84315 15 7.5V12.75C15 13.5784 14.3284 14.25 13.5 14.25C12.6716 14.25 12 13.5784 12 12.75V8.75"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <q-icon name="fas fa-paperclip" size="25px" />
       </button>
       <!-- Send Button -->
       <button

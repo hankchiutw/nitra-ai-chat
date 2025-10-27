@@ -52,27 +52,8 @@
       @click="toggleChat"
       class="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-orange-500 shadow-button hover:opacity-90 transition-opacity"
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        class="text-white"
-      >
-        <path
-          d="M9.667 1L6.333 4.333M13 4.333L11 6.333M9.667 1L11 6.333M9.667 1L4.333 2.333M13 4.333L7.667 5.667M13 4.333L14.333 9.667M11 6.333L7.667 5.667M11 6.333L12.333 11.667M4.333 2.333L6.333 4.333M4.333 2.333L1 3M7.667 5.667L6.333 4.333M14.333 9.667L12.333 11.667M14.333 9.667L15 15M12.333 11.667L9.667 11M6.333 4.333L7.667 9.667M1 3L3 4.667M1 3L1.667 8.333M3 4.667L7.667 9.667M3 4.667L4.333 10.333M7.667 9.667L9.667 11M1.667 8.333L4.333 10.333M1.667 8.333L3 13.667M4.333 10.333L5.667 15M9.667 11L5.667 15M9.667 11L15 15M5.667 15L3 13.667"
-          stroke="currentColor"
-          stroke-width="1"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-      <span
-        class="text-white text-center font-inter font-sm font-semibold leading-5 tracking-[0.07px]"
-      >
-        Ask Nitra AI
-      </span>
+      <q-icon name="fas fa-wand-magic-sparkles" size="12px" class="text-white" />
+      <span class="text-white text-center font-sm font-semibold"> Ask Nitra AI </span>
     </button>
   </div>
 </template>

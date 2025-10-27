@@ -11,8 +11,11 @@
       }"
     >
       <div
-        class="flex px-4 py-2.5 items-start gap-2 rounded-tr-[10px] rounded-br-[10px] rounded-bl-[10px]"
-        :class="messageClasses"
+        class="flex px-4 py-2.5 items-start gap-2 rounded-br-[10px] rounded-bl-[10px] max-w-[600px]"
+        :class="{
+          'bg-gray-0 text-[#0D082C] rounded-tr-[10px]': message.role === 'assistant',
+          'bg-teal-100 text-black rounded-tl-[10px]': message.role === 'user',
+        }"
         @click="handleClick"
       >
         <!-- Render markdown for assistant messages, plain text for user -->
@@ -21,7 +24,6 @@
           class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px] markdown-content"
           v-html="renderedContent"
         ></div>
-        <span v-if="message.role === 'assistant' && isTyping" class="typing-cursor"></span>
         <p
           v-else-if="message.role === 'user'"
           class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px]"
@@ -54,15 +56,8 @@ const { parseMarkdown } = useMarkdown();
 // Only enable typing animation for assistant messages
 const shouldAnimate = computed(() => props.message.role === 'assistant' && props.enableTyping);
 
-const { displayedContent, isTyping, skipAnimation } = useTypingAnimation(props.message.content, {
+const { displayedContent, skipAnimation } = useTypingAnimation(props.message.content, {
   enabled: shouldAnimate.value,
-});
-
-const messageClasses = computed(() => {
-  if (props.message.role === 'assistant') {
-    return 'bg-gray-0 text-[#0D082C] max-w-[600px]';
-  }
-  return 'bg-teal-700 text-white max-w-[600px]';
 });
 
 const renderedContent = computed(() => {
