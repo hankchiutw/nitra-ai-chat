@@ -1,33 +1,28 @@
 <template>
-  <div class="flex items-center justify-center gap-2 py-3">
-    <div class="flex items-center gap-2">
+  <div class="flex items-start gap-2.5">
+    <ChatAvatar />
+
+    <!-- Message Content -->
+    <div class="flex flex-col items-start gap-1.5">
       <div
-        v-for="i in 3"
-        :key="i"
-        class="w-2 h-2 rounded-full bg-teal-300 animate-bounce"
-        :style="{ animationDelay: `${i * 0.15}s` }"
-      ></div>
+        class="flex px-4 py-2.5 items-start gap-2 rounded-br-[10px] rounded-bl-[10px] max-w-[600px] bg-gray-0 text-[#0D082C] rounded-tr-[10px]"
+      >
+        <div
+          class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px] markdown-content"
+        >
+          <!-- animate a 3-dot loading indicator -->
+          Thinking
+          <span class="font-bold opacity-0 animate-[pulse_1.6s_ease-in-out_infinite_0ms]">.</span>
+          <span class="font-bold opacity-0 animate-[pulse_1.6s_ease-in-out_infinite_200ms]">.</span>
+          <span class="font-bold opacity-0 animate-[pulse_1.6s_ease-in-out_infinite_400ms]">.</span>
+        </div>
+      </div>
     </div>
-    <span class="text-gray-600 font-inter font-sm">Nitra AI is typing...</span>
   </div>
 </template>
 
 <script setup lang="ts">
-// Loading indicator component
+import ChatAvatar from 'src/features/chat/components/ChatAvatar.vue';
 </script>
 
-<style scoped>
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-
-.animate-bounce {
-  animation: bounce 1s infinite;
-}
-</style>
+<style scoped></style>
