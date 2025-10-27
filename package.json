@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
+    "dompurify": "3.3.0",
+    "marked": "16.4.1",
     "pinia": "^3.0.1",
     "quasar": "^2.16.0",
     "vue": "^3.5.22",
@@ -26,6 +28,8 @@
     "@quasar/app-vite": "^2.1.0",
     "@tailwindcss/postcss": "4.1.16",
     "@tailwindcss/vite": "4.1.16",
+    "@types/dompurify": "3.2.0",
+    "@types/marked": "6.0.0",
     "@types/node": "^20.5.9",
     "@vue/eslint-config-prettier": "^10.1.0",
     "@vue/eslint-config-typescript": "^14.4.0",
