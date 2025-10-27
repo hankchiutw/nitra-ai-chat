@@ -13,6 +13,7 @@
       <div
         class="flex px-4 py-2.5 items-start gap-2 rounded-tr-[10px] rounded-br-[10px] rounded-bl-[10px]"
         :class="messageClasses"
+        @click="handleClick"
       >
         <!-- Render markdown for assistant messages, plain text for user -->
         <div
@@ -20,7 +21,11 @@
           class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px] markdown-content"
           v-html="renderedContent"
         ></div>
-        <p v-else class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px]">
+        <span v-if="message.role === 'assistant' && isTyping" class="typing-cursor"></span>
+        <p
+          v-else-if="message.role === 'user'"
+          class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px]"
+        >
           {{ message.content }}
         </p>
       </div>
@@ -33,13 +38,32 @@ import { computed } from 'vue';
 import type { Message } from 'src/features/chat/types/chat.types';
 import ChatAvatar from 'src/features/chat/components/ChatAvatar.vue';
 import { useMarkdown } from 'src/features/chat/composables/useMarkdown';
+import { useTypingAnimation } from 'src/features/chat/composables/useTypingAnimation';
 
 interface Props {
   message: Message;
+  enableTyping?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  enableTyping: true,
+});
+
 const { parseMarkdown } = useMarkdown();
+
+// Only enable typing animation for assistant messages
+const shouldAnimate = computed(
+  () => props.message.role === 'assistant' && props.enableTyping
+);
+
+const { displayedContent, isTyping, skipAnimation } = useTypingAnimation(
+  props.message.content,
+  {
+    enabled: shouldAnimate.value,
+    speed: 50, // 50 characters per second
+    delay: 100, // Small delay before starting
+  }
+);
 
 const messageClasses = computed(() => {
   if (props.message.role === 'assistant') {
@@ -50,10 +74,17 @@ const messageClasses = computed(() => {
 
 const renderedContent = computed(() => {
   if (props.message.role === 'assistant') {
-    return parseMarkdown(props.message.content);
+    return parseMarkdown(displayedContent.value);
   }
-  return props.message.content;
+  return displayedContent.value;
 });
+
+// Click to skip animation
+function handleClick() {
+  if (shouldAnimate.value) {
+    skipAnimation();
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -142,6 +173,28 @@ const renderedContent = computed(() => {
     padding-left: 1em;
     margin: 0.5em 0;
     color: #5c6970;
+  }
+}
+
+// Typing cursor animation
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: currentColor;
+  margin-left: 2px;
+  animation: blink 1s infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
   }
 }
 </style>

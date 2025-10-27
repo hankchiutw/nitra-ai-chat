@@ -27,6 +27,7 @@
               v-for="message in chatStore.messages"
               :key="message.id"
               :message="message"
+              :enable-typing="true"
             />
 
             <!-- Loading Indicator -->
