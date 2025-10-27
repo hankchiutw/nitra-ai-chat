@@ -28,6 +28,7 @@
               :key="message.id"
               :message="message"
               :enable-typing="true"
+              @content-update="handleContentUpdate"
             />
 
             <!-- Loading Indicator -->
@@ -80,23 +81,29 @@ onMounted(() => {
 function toggleChat() {
   isOpen.value = !isOpen.value;
   if (isOpen.value) {
-    void nextTick(() => {
-      scrollToBottom();
-      chatInputRef.value?.focus();
-    });
+    scrollToBottom();
+    chatInputRef.value?.focus();
   }
 }
 
 async function handleSendMessage(message: string) {
   await chatStore.sendMessage(message);
-  void nextTick(() => {
-    scrollToBottom();
-  });
+  scrollToBottom();
+}
+
+function handleContentUpdate() {
+  // Called during typing animation to keep scrolled to bottom
+  scrollToBottom();
 }
 
 function scrollToBottom() {
   if (messagesContainer.value) {
-    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+    void nextTick(() => {
+      // Scroll to bottom smoothly
+      messagesContainer.value?.scrollTo({
+        top: messagesContainer.value.scrollHeight,
+      });
+    });
   }
 }
 
@@ -104,9 +111,18 @@ function scrollToBottom() {
 watch(
   () => chatStore.messages.length,
   () => {
-    void nextTick(() => {
+    scrollToBottom();
+  },
+);
+
+// Watch for loading state changes to scroll when response arrives
+watch(
+  () => chatStore.isLoading,
+  (newValue) => {
+    if (!newValue) {
+      // When loading finishes, scroll to bottom smoothly
       scrollToBottom();
-    });
+    }
   },
 );
 </script>

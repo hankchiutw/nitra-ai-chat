@@ -47,9 +47,15 @@ interface Props {
   enableTyping?: boolean;
 }
 
+interface Emits {
+  contentUpdate: [];
+}
+
 const props = withDefaults(defineProps<Props>(), {
   enableTyping: true,
 });
+
+const emit = defineEmits<Emits>();
 
 const { parseMarkdown } = useMarkdown();
 
@@ -58,6 +64,10 @@ const shouldAnimate = computed(() => props.message.role === 'assistant' && props
 
 const { displayedContent, skipAnimation } = useTypingAnimation(props.message.content, {
   enabled: shouldAnimate.value,
+  onUpdate: () => {
+    // Emit event when content updates during typing
+    emit('contentUpdate');
+  },
 });
 
 const renderedContent = computed(() => {

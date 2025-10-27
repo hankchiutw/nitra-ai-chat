@@ -4,6 +4,7 @@ interface UseTypingAnimationOptions {
   enabled?: boolean;
   speed?: number; // characters per second
   delay?: number; // initial delay in ms
+  onUpdate?: () => void; // callback for each character update
 }
 
 /**
@@ -14,6 +15,7 @@ export function useTypingAnimation(content: string, options: UseTypingAnimationO
     enabled = true,
     speed = 100, // characters per second
     delay = 0,
+    onUpdate,
   } = options;
 
   const displayedContent = ref('');
@@ -28,6 +30,7 @@ export function useTypingAnimation(content: string, options: UseTypingAnimationO
     if (!enabled || !content) {
       displayedContent.value = content;
       isComplete.value = true;
+      onUpdate?.();
       return;
     }
 
@@ -55,11 +58,15 @@ export function useTypingAnimation(content: string, options: UseTypingAnimationO
 
     displayedContent.value = content.substring(0, charsToShow);
 
+    // Call onUpdate callback when content changes
+    onUpdate?.();
+
     if (charsToShow < content.length) {
       animationFrame = requestAnimationFrame(animate);
     } else {
       isTyping.value = false;
       isComplete.value = true;
+      onUpdate?.();
     }
   }
 
@@ -73,6 +80,7 @@ export function useTypingAnimation(content: string, options: UseTypingAnimationO
     displayedContent.value = content;
     isTyping.value = false;
     isComplete.value = true;
+    onUpdate?.();
   }
 
   function reset() {
