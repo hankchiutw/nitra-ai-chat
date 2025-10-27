@@ -52,18 +52,11 @@ const props = withDefaults(defineProps<Props>(), {
 const { parseMarkdown } = useMarkdown();
 
 // Only enable typing animation for assistant messages
-const shouldAnimate = computed(
-  () => props.message.role === 'assistant' && props.enableTyping
-);
+const shouldAnimate = computed(() => props.message.role === 'assistant' && props.enableTyping);
 
-const { displayedContent, isTyping, skipAnimation } = useTypingAnimation(
-  props.message.content,
-  {
-    enabled: shouldAnimate.value,
-    speed: 50, // 50 characters per second
-    delay: 100, // Small delay before starting
-  }
-);
+const { displayedContent, isTyping, skipAnimation } = useTypingAnimation(props.message.content, {
+  enabled: shouldAnimate.value,
+});
 
 const messageClasses = computed(() => {
   if (props.message.role === 'assistant') {
