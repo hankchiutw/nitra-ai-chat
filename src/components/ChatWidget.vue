@@ -34,14 +34,7 @@
             <ChatLoading v-if="chatStore.isLoading" />
 
             <!-- Suggestions -->
-            <div v-if="chatStore.suggestions.length > 0" class="flex flex-col gap-2 w-full">
-              <ChatSuggestion
-                v-for="(suggestion, index) in chatStore.suggestions"
-                :key="index"
-                :text="suggestion"
-                @click="handleSuggestionClick"
-              />
-            </div>
+            <ChatSuggestion v-if="chatStore.messages.length <= 1" />
           </div>
         </div>
 
@@ -121,11 +114,6 @@ async function handleSendMessage(message: string) {
   });
 }
 
-function handleSuggestionClick(suggestion: string) {
-  messageInput.value = suggestion;
-  chatInputRef.value?.focus();
-}
-
 function scrollToBottom() {
   if (messagesContainer.value) {
     messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
@@ -139,7 +127,7 @@ watch(
     void nextTick(() => {
       scrollToBottom();
     });
-  }
+  },
 );
 </script>
 

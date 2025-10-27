@@ -118,9 +118,6 @@ export const useChatStore = defineStore('chat', () => {
       timestamp: new Date().toISOString(),
     };
     addMessage(welcomeMessage);
-
-    // Set initial suggestions
-    suggestions.value = ['Upload your supplier list'];
   }
 
   return {
