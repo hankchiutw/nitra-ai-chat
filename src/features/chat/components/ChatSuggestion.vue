@@ -1,18 +1,14 @@
 <template>
-  <TransitionGroup name="suggestion" tag="div" class="flex flex-col gap-2 w-full max-w-[560px]">
-    <div :key="currentSuggestionData.text" class="flex w-full py-2 items-center gap-2">
-      <div class="w-4 h-4 flex-shrink-0 flex items-center justify-center">
+  <Transition name="slide-up" mode="out-in">
+    <div :key="currentSuggestionData.text" class="flex gap-2">
+      <div>
         <q-icon :name="currentSuggestionData.icon" size="16px" class="text-teal-300" />
       </div>
-      <div class="flex flex-col justify-center items-start flex-1">
-        <p
-          class="text-gray-700 font-inter font-sm font-normal leading-normal tracking-[0.5px] text-left"
-        >
-          {{ currentSuggestionData.text }}
-        </p>
+      <div class="text-gray-700 font-sm">
+        {{ currentSuggestionData.text }}
       </div>
     </div>
-  </TransitionGroup>
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -26,25 +22,35 @@ interface Suggestion {
 const suggestions: Suggestion[] = [
   {
     text: 'Upload your supplier list',
-    icon: 'fas fa-cloud-arrow-up',
+    icon: 'fas fa-list',
   },
   {
-    text: 'Compare product prices',
-    icon: 'fas fa-chart-line',
+    text: 'Check if Avastin is in stock',
+    icon: 'fas fa-cart-shopping',
   },
   {
-    text: 'Find best deals',
-    icon: 'fas fa-magnifying-glass-dollar',
+    text: "Check if there's a better price for Xeomin",
+    icon: 'fas fa-hand-holding-dollar',
   },
   {
-    text: 'Track order status',
-    icon: 'fas fa-truck-fast',
+    text: 'What are some generic options for Restylane',
+    icon: 'fas fa-magnifying-glass',
+  },
+  {
+    text: "What's the best product for Xeomin",
+    icon: 'fas fa-thumbs-up',
   },
 ];
 
+const defaultSuggestion: Suggestion = {
+  text: 'Upload your supplier list',
+  icon: 'fas fa-cloud-arrow-up',
+};
+
 const currentIndex = ref(0);
 const currentSuggestionData = computed((): Suggestion => {
-  return suggestions[currentIndex.value] as Suggestion;
+  const suggestion = suggestions[currentIndex.value];
+  return suggestion ?? defaultSuggestion;
 });
 let intervalId: number | null = null;
 
@@ -54,7 +60,7 @@ function rotateSuggestion() {
 
 onMounted(() => {
   // Start rotation after 3 seconds
-  intervalId = window.setInterval(rotateSuggestion, 3000);
+  intervalId = window.setInterval(rotateSuggestion, 2000);
 });
 
 onUnmounted(() => {
@@ -70,19 +76,18 @@ onUnmounted(() => {
   color: #64b1b5;
 }
 
-// Suggestion transition
-.suggestion-enter-active,
-.suggestion-leave-active {
-  transition: all 0.5s ease;
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.25s ease-out;
 }
 
-.suggestion-enter-from {
+.slide-up-enter-from {
   opacity: 0;
-  transform: translateX(-10px);
+  transform: translateY(10px);
 }
 
-.suggestion-leave-to {
+.slide-up-leave-to {
   opacity: 0;
-  transform: translateX(10px);
+  transform: translateY(-10px);
 }
 </style>

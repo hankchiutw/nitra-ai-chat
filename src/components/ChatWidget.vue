@@ -32,10 +32,9 @@
 
             <!-- Loading Indicator -->
             <ChatLoading v-if="chatStore.isLoading" />
-
-            <!-- Suggestions -->
-            <ChatSuggestion v-if="chatStore.messages.length <= 1" />
           </div>
+          <!-- Suggestions -->
+          <ChatSuggestion v-if="chatStore.messages.length <= 1" />
         </div>
 
         <!-- Input Area -->
