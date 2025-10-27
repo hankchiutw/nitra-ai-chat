@@ -70,7 +70,7 @@ export const useChatStore = defineStore('chat', () => {
 
   async function simulateDelay(): Promise<void> {
     // Simulate network delay (500-1500ms)
-    const delay = 500 + Math.random() * 1000;
+    const delay = 500 + Math.random() * 5000;
     return new Promise((resolve) => setTimeout(resolve, delay));
   }
 
