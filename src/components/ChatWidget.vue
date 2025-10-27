@@ -38,7 +38,7 @@
               </div>
               <!-- Title -->
               <div class="flex items-center gap-4">
-                <h1 class="text-white font-source-sans text-[30px] font-bold leading-normal">
+                <h1 class="text-white font-source-sans font-3xl font-bold leading-normal">
                   Nitra AI
                 </h1>
                 <div class="w-6 h-6 flex items-center justify-center">
@@ -63,7 +63,7 @@
               </div>
             </div>
             <div class="flex h-6 flex-col justify-center items-start">
-              <p class="text-white font-source-sans text-base font-normal leading-7">
+              <p class="text-white font-source-sans font-md font-normal leading-7">
                 Hi there, How can we help?
               </p>
             </div>
@@ -132,7 +132,7 @@
                   class="flex max-w-[600px] px-4 py-2.5 items-start gap-2 rounded-tr-[10px] rounded-br-[10px] rounded-bl-[10px] bg-gray-0"
                 >
                   <p
-                    class="flex-1 text-[#0D082C] font-inter text-base font-normal leading-normal tracking-[0.5px]"
+                    class="flex-1 text-[#0D082C] font-inter font-md font-normal leading-normal tracking-[0.5px]"
                   >
                     Welcome to Nitra AI!
                   </p>
@@ -175,7 +175,7 @@
               </div>
               <div class="flex flex-col justify-center items-start flex-1">
                 <p
-                  class="text-gray-700 font-inter text-sm font-normal leading-normal tracking-[0.5px]"
+                  class="text-gray-700 font-inter font-sm font-normal leading-normal tracking-[0.5px]"
                 >
                   Upload your supplier list
                 </p>
@@ -194,7 +194,7 @@
               type="text"
               placeholder="Say something..."
               v-model="messageInput"
-              class="text-[#0D082C]/60 font-source-sans text-base font-normal leading-6 outline-none bg-transparent min-w-[200px] md:min-w-[400px]"
+              class="text-[#0D082C]/60 font-source-sans font-md font-normal leading-6 outline-none bg-transparent min-w-[200px] md:min-w-[400px]"
             />
           </div>
           <div class="flex items-center gap-5">
@@ -265,7 +265,7 @@
         />
       </svg>
       <span
-        class="text-white text-center font-inter text-sm font-semibold leading-5 tracking-[0.07px]"
+        class="text-white text-center font-inter font-sm font-semibold leading-5 tracking-[0.07px]"
       >
         Ask Nitra AI
       </span>
