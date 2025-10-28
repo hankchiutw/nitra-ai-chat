@@ -19,7 +19,7 @@
         <!-- Body -->
         <div
           ref="messagesContainer"
-          class="flex min-h-[420px] max-h-[900px] h-[60vh] px-5 pt-8 pb-5 flex-col justify-between items-start bg-white overflow-y-auto"
+          class="flex min-h-[420px] max-h-[900px] h-[60vh] px-5 pt-8 pb-5 flex-col justify-between items-start bg-white overflow-y-auto [scrollbar-gutter:stable]"
         >
           <!-- Chat Messages -->
           <div class="flex flex-col gap-5 w-full">
