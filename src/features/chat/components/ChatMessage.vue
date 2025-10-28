@@ -23,6 +23,7 @@
           :content="message.content"
           :enabled="enableTyping"
           @update="handleContentUpdate"
+          @complete="handleContentComplete"
         >
           <template #default="{ content }">
             <div
@@ -41,9 +42,36 @@
       </div>
     </div>
   </div>
+
+  <!-- Suggestion (only for assistant messages after content completes) -->
+  <div
+    v-if="message.role === 'assistant' && message.suggestion && showSuggestion"
+    class="flex items-start gap-2.5"
+  >
+    <!-- Empty space for avatar alignment -->
+    <div class="w-6 h-6 relative flex-shrink-0"></div>
+
+    <div class="flex flex-col items-start gap-1.5">
+      <div
+        class="flex px-4 py-2.5 items-start gap-2 rounded-br-[10px] rounded-bl-[10px] max-w-[600px] bg-gray-0 text-[#0D082C] rounded-tr-[10px]"
+      >
+        <!-- Render markdown for assistant messages with typing animation -->
+        <TypingText :content="message.suggestion" :enabled="enableTyping">
+          <template #default="{ content }">
+            <span
+              class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px] markdown-content"
+            >
+              {{ content }}
+            </span>
+          </template>
+        </TypingText>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import type { Message } from 'src/features/chat/types/chat.types';
 import ChatAvatar from 'src/features/chat/components/ChatAvatar.vue';
 import TypingText from 'src/features/chat/components/TypingText.vue';
@@ -56,6 +84,7 @@ interface Props {
 
 interface Emits {
   contentUpdate: [];
+  suggestionClick: [suggestion: string];
 }
 
 withDefaults(defineProps<Props>(), {
@@ -65,9 +94,15 @@ withDefaults(defineProps<Props>(), {
 const emit = defineEmits<Emits>();
 
 const { parseMarkdown } = useMarkdown();
+const showSuggestion = ref(false);
 
 function handleContentUpdate() {
   emit('contentUpdate');
+}
+
+function handleContentComplete() {
+  // Show suggestion after content animation completes
+  showSuggestion.value = true;
 }
 </script>
 

@@ -7,7 +7,6 @@ export const useChatStore = defineStore('chat', () => {
   // State
   const messages = ref<Message[]>([]);
   const isLoading = ref(false);
-  const suggestions = ref<string[]>([]);
 
   // Getters
   const hasMessages = computed(() => messages.value.length > 0);
@@ -22,8 +21,12 @@ export const useChatStore = defineStore('chat', () => {
     return `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
-  function extractSuggestionsFromContent(content: string): string[] {
+  function extractSuggestionsFromContent(content: string): {
+    cleanContent: string;
+    suggestions: string[];
+  } {
     const suggestions: string[] = [];
+    let cleanContent = content;
 
     // Extract "Suggested Question:" or "Suggestion Question:" from content
     const suggestionMatch = content.match(/Suggest(?:ed|ion) Question:(.+?)(?:\n|$)/i);
@@ -31,10 +34,12 @@ export const useChatStore = defineStore('chat', () => {
       const suggestion = suggestionMatch[1].trim();
       if (suggestion && suggestion.length > 0) {
         suggestions.push(suggestion);
+        // Remove the suggestion line from content
+        cleanContent = content.replace(/\n*Suggest(?:ed|ion) Question:.+?(?:\n|$)/i, '').trim();
       }
     }
 
-    return suggestions;
+    return { cleanContent, suggestions };
   }
 
   function getMockResponse(userMessage: string): Message {
@@ -44,17 +49,15 @@ export const useChatStore = defineStore('chat', () => {
     if (mockData) {
       const { message } = mockData;
 
-      // Extract suggestions from content
-      const extractedSuggestions = extractSuggestionsFromContent(message.content);
-      if (extractedSuggestions.length > 0) {
-        suggestions.value = extractedSuggestions;
-      }
+      // Extract suggestions from content and get clean content
+      const { cleanContent, suggestions: extractedSuggestions } = extractSuggestionsFromContent(message.content);
 
       return {
         id: generateMessageId(),
         role: message.role as 'assistant',
-        content: message.content,
+        content: cleanContent,
         timestamp: new Date().toISOString(),
+        suggestion: extractedSuggestions[0] || '',
       };
     }
 
@@ -105,7 +108,6 @@ export const useChatStore = defineStore('chat', () => {
 
   function clearMessages(): void {
     messages.value = [];
-    suggestions.value = [];
     isLoading.value = false;
   }
 
@@ -124,7 +126,6 @@ export const useChatStore = defineStore('chat', () => {
     // State
     messages,
     isLoading,
-    suggestions,
 
     // Getters
     hasMessages,

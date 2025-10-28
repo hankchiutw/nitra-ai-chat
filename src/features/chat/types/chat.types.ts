@@ -3,6 +3,7 @@ export interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
+  suggestion?: string;
 }
 
 export interface ChatState {
