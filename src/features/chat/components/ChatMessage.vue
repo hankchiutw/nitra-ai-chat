@@ -16,14 +16,22 @@
           'bg-gray-0 text-[#0D082C] rounded-tr-[10px]': message.role === 'assistant',
           'bg-teal-100 text-black rounded-tl-[10px]': message.role === 'user',
         }"
-        @click="handleClick"
       >
-        <!-- Render markdown for assistant messages, plain text for user -->
-        <div
+        <!-- Render markdown for assistant messages with typing animation -->
+        <TypingText
           v-if="message.role === 'assistant'"
-          class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px] markdown-content"
-          v-html="renderedContent"
-        ></div>
+          :content="message.content"
+          :enabled="enableTyping"
+          @update="handleContentUpdate"
+        >
+          <template #default="{ content }">
+            <div
+              class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px] markdown-content"
+              v-html="parseMarkdown(content)"
+            ></div>
+          </template>
+        </TypingText>
+        <!-- Plain text for user messages -->
         <p
           v-else-if="message.role === 'user'"
           class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px]"
@@ -36,11 +44,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import type { Message } from 'src/features/chat/types/chat.types';
 import ChatAvatar from 'src/features/chat/components/ChatAvatar.vue';
+import TypingText from 'src/features/chat/components/TypingText.vue';
 import { useMarkdown } from 'src/features/chat/composables/useMarkdown';
-import { useTypingAnimation } from 'src/features/chat/composables/useTypingAnimation';
 
 interface Props {
   message: Message;
@@ -51,7 +58,7 @@ interface Emits {
   contentUpdate: [];
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   enableTyping: true,
 });
 
@@ -59,29 +66,8 @@ const emit = defineEmits<Emits>();
 
 const { parseMarkdown } = useMarkdown();
 
-// Only enable typing animation for assistant messages
-const shouldAnimate = computed(() => props.message.role === 'assistant' && props.enableTyping);
-
-const { displayedContent, skipAnimation } = useTypingAnimation(props.message.content, {
-  enabled: shouldAnimate.value,
-  onUpdate: () => {
-    // Emit event when content updates during typing
-    emit('contentUpdate');
-  },
-});
-
-const renderedContent = computed(() => {
-  if (props.message.role === 'assistant') {
-    return parseMarkdown(displayedContent.value);
-  }
-  return displayedContent.value;
-});
-
-// Click to skip animation
-function handleClick() {
-  if (shouldAnimate.value) {
-    skipAnimation();
-  }
+function handleContentUpdate() {
+  emit('contentUpdate');
 }
 </script>
 
