@@ -70,19 +70,6 @@ export function useTypingAnimation(content: string, options: UseTypingAnimationO
     }
   }
 
-  function skipAnimation() {
-    if (animationFrame !== null) {
-      cancelAnimationFrame(animationFrame);
-    }
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId);
-    }
-    displayedContent.value = content;
-    isTyping.value = false;
-    isComplete.value = true;
-    onUpdate?.();
-  }
-
   function reset() {
     if (animationFrame !== null) {
       cancelAnimationFrame(animationFrame);
@@ -114,7 +101,6 @@ export function useTypingAnimation(content: string, options: UseTypingAnimationO
     displayedContent,
     isTyping,
     isComplete,
-    skipAnimation,
     reset,
   };
 }
