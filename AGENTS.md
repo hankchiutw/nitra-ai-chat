@@ -48,6 +48,7 @@ src/
 When implementing new features, organize code by feature rather than by type. Create feature directories that contain all related components, stores, composables, and utilities.
 
 **Example structure for a chat feature:**
+
 ```
 src/
 └── features/
@@ -88,12 +89,14 @@ function increment() {
 Use Pinia for global state management. Each store should be self-contained and feature-specific.
 
 **Store conventions:**
+
 - Use `defineStore` with the Composition API style or Options API style
 - Enable HMR (Hot Module Replacement) for development
 - Keep stores focused on a single feature or domain
 - Use TypeScript for type safety
 
 **Example store (Composition API style - recommended):**
+
 ```typescript
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref, computed } from 'vue';
@@ -101,17 +104,17 @@ import { ref, computed } from 'vue';
 export const useFeatureStore = defineStore('feature', () => {
   // State (using ref)
   const data = ref<DataType[]>([]);
-  
+
   // Getters (using computed)
   const filteredData = computed(() => {
     return data.value.filter(/* ... */);
   });
-  
+
   // Actions (using functions)
   function addData(item: DataType) {
     data.value.push(item);
   }
-  
+
   return {
     data,
     filteredData,
@@ -126,6 +129,7 @@ if (import.meta.hot) {
 ```
 
 **Example store (Options API style):**
+
 ```typescript
 import { defineStore, acceptHMRUpdate } from 'pinia';
 
@@ -133,13 +137,13 @@ export const useFeatureStore = defineStore('feature', {
   state: () => ({
     data: [] as DataType[],
   }),
-  
+
   getters: {
     filteredData: (state) => {
       return state.data.filter(/* ... */);
     },
   },
-  
+
   actions: {
     addData(item: DataType) {
       this.data.push(item);
@@ -233,6 +237,7 @@ Routes are defined in `src/router/routes.ts`. Use lazy loading for all page comp
 ### Package Management
 
 **Always use pnpm for package operations:**
+
 ```bash
 # Install dependencies
 pnpm install
@@ -307,7 +312,7 @@ const $q = useQuasar();
 function showNotification() {
   $q.notify({
     message: 'Hello World!',
-    color: 'primary'
+    color: 'primary',
   });
 }
 </script>
@@ -323,15 +328,15 @@ import { ref, computed } from 'vue';
 
 export function useFeature() {
   const state = ref(initialState);
-  
+
   const derivedValue = computed(() => {
     return transform(state.value);
   });
-  
+
   function updateState(newValue: StateType) {
     state.value = newValue;
   }
-  
+
   return {
     state,
     derivedValue,
@@ -353,7 +358,7 @@ export const chatApi = {
     const response = await fetch('/api/messages');
     return response.json();
   },
-  
+
   async sendMessage(message: string) {
     const response = await fetch('/api/messages', {
       method: 'POST',
@@ -385,11 +390,7 @@ function onSubmit() {
 
 <template>
   <q-form @submit="onSubmit">
-    <q-input
-      v-model="formData.name"
-      label="Name"
-      :rules="[(val) => !!val || 'Name is required']"
-    />
+    <q-input v-model="formData.name" label="Name" :rules="[(val) => !!val || 'Name is required']" />
     <q-input
       v-model="formData.email"
       label="Email"
@@ -416,7 +417,7 @@ const data = ref<DataType | null>(null);
 async function fetchData() {
   loading.value = true;
   error.value = null;
-  
+
   try {
     data.value = await apiCall();
   } catch (e) {

@@ -9,15 +9,13 @@ Added a smooth typing animation effect for assistant messages in the chat interf
 **File**: `src/features/chat/composables/useTypingAnimation.ts`
 
 ```typescript
-export function useTypingAnimation(
-  content: string,
-  options: UseTypingAnimationOptions = {}
-) {
+export function useTypingAnimation(content: string, options: UseTypingAnimationOptions = {}) {
   // Returns: displayedContent, isTyping, isComplete, skipAnimation, reset
 }
 ```
 
 **Features**:
+
 - ✅ Character-by-character animation using `requestAnimationFrame`
 - ✅ Configurable speed (characters per second)
 - ✅ Optional initial delay
@@ -27,6 +25,7 @@ export function useTypingAnimation(
 - ✅ Smooth 60fps animation
 
 **Options**:
+
 - `enabled` (boolean) - Toggle animation on/off (default: true)
 - `speed` (number) - Characters per second (default: 100)
 - `delay` (number) - Initial delay in ms (default: 0)
@@ -36,6 +35,7 @@ export function useTypingAnimation(
 **File**: `src/features/chat/components/ChatMessage.vue`
 
 **Changes**:
+
 - ✅ Imported `useTypingAnimation` composable
 - ✅ Added `enableTyping` prop (default: true)
 - ✅ Animation only for assistant messages
@@ -44,6 +44,7 @@ export function useTypingAnimation(
 - ✅ Typing animation works with markdown rendering
 
 **New Props**:
+
 ```typescript
 interface Props {
   message: Message;
@@ -54,6 +55,7 @@ interface Props {
 ### 3. Added Typing Cursor Animation
 
 **CSS Animation**:
+
 ```scss
 .typing-cursor {
   display: inline-block;
@@ -66,12 +68,19 @@ interface Props {
 }
 
 @keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 ```
 
 **Features**:
+
 - Blinking vertical cursor (2px wide)
 - 1 second blink cycle (0.5s on, 0.5s off)
 - Matches text color
@@ -83,12 +92,14 @@ interface Props {
 **File**: `src/components/ChatWidget.vue`
 
 **Changes**:
+
 - ✅ Added `:enable-typing="true"` prop to ChatMessage components
 - ✅ Typing animation enabled by default for all messages
 
 ## 🎨 Animation Behavior
 
 ### Flow
+
 1. **Message added to chat** → Typing animation starts
 2. **Characters appear** progressively at 50 chars/sec
 3. **Cursor blinks** during animation
@@ -96,11 +107,13 @@ interface Props {
 5. **User can skip** by clicking on the message
 
 ### Timing
+
 - **Speed**: 50 characters per second
 - **Delay**: 100ms before starting
 - **Example**: 1000 character message = ~20 seconds to complete
 
 ### User Interaction
+
 - ✅ Click message to skip and show full text instantly
 - ✅ Scrolling works during animation
 - ✅ Multiple messages animate independently
@@ -108,12 +121,14 @@ interface Props {
 ## 🎯 Technical Details
 
 ### Performance Optimizations
+
 1. **requestAnimationFrame** - Smooth 60fps animation
 2. **Computed properties** - Markdown parsing cached
 3. **Efficient text slicing** - Uses `substring()` for performance
 4. **Cleanup** - Cancels animation frames on unmount
 
 ### Edge Cases Handled
+
 - ✅ Empty messages (no animation)
 - ✅ Very short messages (still animates smoothly)
 - ✅ Very long messages (smooth with skip option)
@@ -124,11 +139,13 @@ interface Props {
 ## 📊 Impact
 
 ### Bundle Size
+
 - **Before**: 221.87 KB JS
 - **After**: 222.99 KB JS (+1.12 KB, +0.5%)
 - Minimal impact (~1KB for animation logic)
 
 ### User Experience
+
 - ✅ More engaging and "alive" chat experience
 - ✅ Mimics human typing behavior
 - ✅ Provides visual feedback during message display
@@ -167,17 +184,15 @@ You can adjust the animation speed:
 
 ```typescript
 // In ChatMessage.vue
-const { displayedContent, isTyping, skipAnimation } = useTypingAnimation(
-  props.message.content,
-  {
-    enabled: shouldAnimate.value,
-    speed: 100, // ← Adjust this (chars per second)
-    delay: 100, // ← Adjust initial delay (ms)
-  }
-);
+const { displayedContent, isTyping, skipAnimation } = useTypingAnimation(props.message.content, {
+  enabled: shouldAnimate.value,
+  speed: 100, // ← Adjust this (chars per second)
+  delay: 100, // ← Adjust initial delay (ms)
+});
 ```
 
 **Speed recommendations**:
+
 - `30` - Very slower, more dramatic
 - `50` - Slower, balanced
 - `100` - Default, less dramatic
@@ -203,11 +218,12 @@ The typing animation works seamlessly with markdown rendering:
 ✅ Cursor animation works  
 ✅ Works with markdown rendering  
 ✅ User messages show instantly  
-✅ Memory cleanup on unmount  
+✅ Memory cleanup on unmount
 
 ## 🎯 Summary
 
 Successfully implemented a typing animation feature with:
+
 - Smooth character-by-character animation
 - Blinking cursor effect
 - Click to skip functionality

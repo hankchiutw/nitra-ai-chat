@@ -40,16 +40,18 @@ The chat store manages all chat state and actions.
 ## Types
 
 ### `Message`
+
 ```typescript
 {
-  id: string;           // Unique message ID
+  id: string; // Unique message ID
   role: 'user' | 'assistant';
-  content: string;      // Message content
-  timestamp: string;    // ISO timestamp
+  content: string; // Message content
+  timestamp: string; // ISO timestamp
 }
 ```
 
 ### `ChatState`
+
 ```typescript
 {
   messages: Message[];
