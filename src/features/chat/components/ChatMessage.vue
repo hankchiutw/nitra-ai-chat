@@ -88,7 +88,6 @@ interface Props {
 
 interface Emits {
   contentUpdate: [];
-  suggestionClick: [suggestion: string];
 }
 
 withDefaults(defineProps<Props>(), {
