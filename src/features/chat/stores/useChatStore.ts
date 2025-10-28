@@ -50,7 +50,9 @@ export const useChatStore = defineStore('chat', () => {
       const { message } = mockData;
 
       // Extract suggestions from content and get clean content
-      const { cleanContent, suggestions: extractedSuggestions } = extractSuggestionsFromContent(message.content);
+      const { cleanContent, suggestions: extractedSuggestions } = extractSuggestionsFromContent(
+        message.content,
+      );
 
       return {
         id: generateMessageId(),
