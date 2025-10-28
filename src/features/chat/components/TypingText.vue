@@ -19,6 +19,7 @@ interface Props {
 interface Emits {
   update: [];
   complete: [];
+  typingStart: [];
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -33,6 +34,9 @@ const { displayedContent, isTyping, isComplete } = useTypingAnimation(props.cont
   enabled: props.enabled,
   speed: props.speed,
   delay: props.delay,
+  onStart: () => {
+    emit('typingStart');
+  },
   onUpdate: () => {
     emit('update');
   },

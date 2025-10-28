@@ -29,6 +29,8 @@
               :message="message"
               :enable-typing="true"
               @content-update="handleContentUpdate"
+              @typing-start="handleTypingStart"
+              @typing-complete="handleTypingComplete"
             />
 
             <!-- Loading Indicator -->
@@ -42,7 +44,7 @@
         <ChatInput
           ref="chatInputRef"
           v-model="messageInput"
-          :disabled="chatStore.isLoading"
+          :disabled="isInputDisabled"
           @send="handleSendMessage"
         />
       </div>
@@ -60,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, onMounted, watch } from 'vue';
+import { ref, nextTick, onMounted, watch, computed } from 'vue';
 import { useChatStore } from 'src/features/chat';
 import ChatHeader from 'src/features/chat/components/ChatHeader.vue';
 import ChatMessage from 'src/features/chat/components/ChatMessage.vue';
@@ -73,6 +75,9 @@ const isOpen = ref(true);
 const messageInput = ref('');
 const messagesContainer = ref<HTMLDivElement | null>(null);
 const chatInputRef = ref<InstanceType<typeof ChatInput> | null>(null);
+const isTyping = ref(false);
+
+const isInputDisabled = computed(() => chatStore.isLoading || isTyping.value);
 
 onMounted(() => {
   chatStore.initializeChat();
@@ -94,6 +99,14 @@ async function handleSendMessage(message: string) {
 function handleContentUpdate() {
   // Called during typing animation to keep scrolled to bottom
   scrollToBottom();
+}
+
+function handleTypingStart() {
+  isTyping.value = true;
+}
+
+function handleTypingComplete() {
+  isTyping.value = false;
 }
 
 function scrollToBottom() {

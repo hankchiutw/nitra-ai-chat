@@ -4,6 +4,7 @@ interface UseTypingAnimationOptions {
   enabled?: boolean;
   speed?: number; // characters per second
   delay?: number; // initial delay in ms
+  onStart?: () => void; // callback when typing starts
   onUpdate?: () => void; // callback for each character update
 }
 
@@ -15,6 +16,7 @@ export function useTypingAnimation(content: string, options: UseTypingAnimationO
     enabled = true,
     speed = 100, // characters per second
     delay = 0,
+    onStart,
     onUpdate,
   } = options;
 
@@ -37,6 +39,9 @@ export function useTypingAnimation(content: string, options: UseTypingAnimationO
     isTyping.value = true;
     isComplete.value = false;
     displayedContent.value = '';
+    
+    // Call onStart callback when typing starts
+    onStart?.();
 
     const start = () => {
       startTime = performance.now();

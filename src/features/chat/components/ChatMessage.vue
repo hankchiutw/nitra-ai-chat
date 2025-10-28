@@ -23,7 +23,8 @@
           :content="message.content"
           :enabled="enableTyping"
           @update="handleContentUpdate"
-          @complete="handleContentComplete"
+          @typing-start="handleContentTypingStart"
+          @complete="handleContentTypingComplete"
         >
           <template #default="{ content }">
             <div
@@ -60,6 +61,8 @@
           :content="message.suggestion"
           :enabled="enableTyping"
           @update="handleContentUpdate"
+          @typing-start="handleSuggestionTypingStart"
+          @complete="handleSuggestionTypingComplete"
         >
           <template #default="{ content }">
             <span
@@ -88,6 +91,8 @@ interface Props {
 
 interface Emits {
   contentUpdate: [];
+  typingStart: [];
+  typingComplete: [];
 }
 
 withDefaults(defineProps<Props>(), {
@@ -98,14 +103,39 @@ const emit = defineEmits<Emits>();
 
 const { parseMarkdown } = useMarkdown();
 const showSuggestion = ref(false);
+const isContentTyping = ref(false);
+const isSuggestionTyping = ref(false);
 
 function handleContentUpdate() {
   emit('contentUpdate');
 }
 
-function handleContentComplete() {
+function handleContentTypingStart() {
+  isContentTyping.value = true;
+  emit('typingStart');
+}
+
+function handleContentTypingComplete() {
+  isContentTyping.value = false;
   // Show suggestion after content animation completes
   showSuggestion.value = true;
+  // Check if all typing is done
+  if (!isSuggestionTyping.value) {
+    emit('typingComplete');
+  }
+}
+
+function handleSuggestionTypingStart() {
+  isSuggestionTyping.value = true;
+  emit('typingStart');
+}
+
+function handleSuggestionTypingComplete() {
+  isSuggestionTyping.value = false;
+  // Check if all typing is done
+  if (!isContentTyping.value) {
+    emit('typingComplete');
+  }
 }
 </script>
 
