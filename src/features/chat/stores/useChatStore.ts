@@ -50,9 +50,7 @@ export const useChatStore = defineStore('chat', () => {
       const { message } = mockData;
 
       // Extract suggestions from content and get clean content
-      const { cleanContent, suggestions: extractedSuggestions } = extractSuggestionsFromContent(
-        message.content,
-      );
+      const { cleanContent, suggestions: extractedSuggestions } = extractSuggestionsFromContent(message.content);
 
       return {
         id: generateMessageId(),
@@ -64,12 +62,15 @@ export const useChatStore = defineStore('chat', () => {
     }
 
     // Fallback response for unmatched messages
+    const mockQuestions: string[] = Object.keys(MESSAGE_MOCK_MAP);
+    const randomIndex = Math.floor(Math.random() * mockQuestions.length);
     return {
       id: generateMessageId(),
-      role: 'assistant',
+      role: 'assistant' as const,
       content:
-        'I understand your question. For now, I can help with specific queries about products. Try asking one of the suggested questions below!',
+        'I understand your question. For now, I can help with specific queries about products. Try asking this question:',
       timestamp: new Date().toISOString(),
+      suggestion: mockQuestions[randomIndex] || '',
     };
   }
 
