@@ -56,7 +56,11 @@
         class="flex px-4 py-2.5 items-start gap-2 rounded-br-[10px] rounded-bl-[10px] max-w-[600px] bg-gray-0 text-[#0D082C] rounded-tr-[10px]"
       >
         <!-- Render markdown for assistant messages with typing animation -->
-        <TypingText :content="message.suggestion" :enabled="enableTyping">
+        <TypingText
+          :content="message.suggestion"
+          :enabled="enableTyping"
+          @update="handleContentUpdate"
+        >
           <template #default="{ content }">
             <span
               class="flex-1 font-inter font-md font-normal leading-normal tracking-[0.5px] markdown-content"
