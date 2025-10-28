@@ -21,13 +21,15 @@
       >
         <q-icon name="fas fa-paperclip" size="25px" />
       </button>
-      <!-- Send Button -->
+      <!-- Send Button / Loading Spinner -->
       <button
         class="flex w-9 h-9 justify-center items-center gap-2 rounded-full bg-teal-700 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         :disabled="!canSend"
         @click="handleSend"
       >
+        <q-spinner v-if="disabled" size="24px" color="white" />
         <svg
+          v-else
           width="24"
           height="24"
           viewBox="0 0 24 24"
